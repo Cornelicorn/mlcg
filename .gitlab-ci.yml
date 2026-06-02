@@ -11,13 +11,13 @@ test_job:
     - uv pip install .
     - uv pip install pytest-split
     - source .venv/bin/activate
-    - pytest -m "unit" --verbose --junitxml=tests.xml --durations-path tests/.test_durations --splits "$CI_NODE_TOTAL" --group "$CI_NODE_INDEX" --splitting-algorithm least_duration
-    - pytest -m "continuity" --verbose --junitxml=tests.xml --durations-path tests/.test_durations --splits "$CI_NODE_TOTAL" --group "$CI_NODE_INDEX" --splitting-algorithm least_duration
-    - pytest -m "integration" --verbose --junitxml=tests.xml --durations-path tests/.test_durations --splits "$CI_NODE_TOTAL" --group "$CI_NODE_INDEX" --splitting-algorithm least_duration
+    - pytest -m "unit" --verbose --junitxml="tests${CI_NODE_INDEX}.xml" --durations-path tests/.test_durations --splits "$CI_NODE_TOTAL" --group "$CI_NODE_INDEX" --splitting-algorithm least_duration
+    - pytest -m "continuity" --verbose --junitxml="tests${CI_NODE_INDEX}.xml" --durations-path tests/.test_durations --splits "$CI_NODE_TOTAL" --group "$CI_NODE_INDEX" --splitting-algorithm least_duration
+    - pytest -m "integration" --verbose --junitxml="tests${CI_NODE_INDEX}.xml" --durations-path tests/.test_durations --splits "$CI_NODE_TOTAL" --group "$CI_NODE_INDEX" --splitting-algorithm least_duration
   parallel: 5
   artifacts:
     when: always
     paths:
-      - tests.xml
+      - "tests${CI_NODE_INDEX}.xml"
     reports:
-      junit: tests.xml
+      junit: "tests${CI_NODE_INDEX}.xml"
